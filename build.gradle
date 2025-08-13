@@ -178,8 +178,8 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 mixin{
-    add sourceSets.main, 'mixins.khorn.refmap.json'
-    config 'mixins.khorn.json'
+    add sourceSets.main, 'mixins.tartarus.refmap.json'
+    config 'mixins.tartarus.json'
     debug.verbose = true
     debug.export = true
 }

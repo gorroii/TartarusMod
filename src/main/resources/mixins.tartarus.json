@@ -2,7 +2,9 @@
   "required": true,
   "compatibilityLevel": "JAVA_17",
   "package": "com.dot.tartarus.Mixin",
-  "refmap": "mixins.khorn.refmap.json",
+  "refmap": "mixins.tartarus.refmap.json",
   "mixins": [
+    "MixinPlayerRenderer",
+    "MixinAbstractClientPlayer"
   ]
 }

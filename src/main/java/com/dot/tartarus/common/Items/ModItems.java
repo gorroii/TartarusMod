@@ -42,8 +42,14 @@ public class ModItems {
     public static final RegistryObject<Item> ADVANCED_TRIGGER_MECHANISM = ITEMS.register("advanced_trigger_mechanism",
             () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
 
-    public static final RegistryObject<Item> STANDART_UPPER_RECIEVER_SG550 = ITEMS.register("standart_upper_reciever-sg550",
+    public static final RegistryObject<Item> UPPER_RECIEVER_SG550 = ITEMS.register("upper_reciever-sg550",
             () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
+
+    public static final RegistryObject<Item> BASIC_RIFLE_STOCK = ITEMS.register("basic_rifle_stock",
+            () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
+    public static final RegistryObject<Item> INCOMPLETE_SG550 = ITEMS.register("incomplete_sg550",
+            () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
+
 
 
 
