@@ -1,5 +1,6 @@
 package com.dot.tartarus;
 
+import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Blocks.ModBlocks;
 import com.dot.tartarus.common.Items.ModCreativeModTabs;
 import com.dot.tartarus.common.Items.ModItems;
@@ -40,6 +41,7 @@ public class TartarusMod
         ModCreativeModTabs.register(modEventBus);
         ModBlocks.register(modEventBus);
         modEventBus.addListener(this::addCreative);
+        TRNetwork.registerMessages();
 
 
 

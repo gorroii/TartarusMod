@@ -4,7 +4,6 @@
   "package": "com.dot.tartarus.Mixin",
   "refmap": "mixins.tartarus.refmap.json",
   "mixins": [
-    "MixinPlayerRenderer",
     "MixinAbstractClientPlayer"
   ]
 }

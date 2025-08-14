@@ -1,6 +1,9 @@
 package com.dot.tartarus.Mixin;
 
+import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
+import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -8,9 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.HashMap;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class MixinAbstractClientPlayer extends Player {
@@ -23,6 +25,32 @@ public abstract class MixinAbstractClientPlayer extends Player {
      */
     @Overwrite
     public ResourceLocation getSkinTextureLocation(){
-        return new ResourceLocation("tartarus:textures/entity/player/skin/random_skin.png");
+        Player player = Minecraft.getInstance().player;
+        ResourceLocation location = null;
+        int gender = player.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
+        int skin = player.getCapability(ISkinProvider.Skin).map(gendercap -> gendercap.getSkin()).orElse(null);
+
+
+        HashMap<Integer, ResourceLocation> femalemap = new HashMap<Integer, ResourceLocation>();
+        femalemap.put(0, new ResourceLocation("tartarus:textures/entity/player/skin/random_skin.png"));
+        femalemap.put(1, new ResourceLocation("tartarus:textures/entity/player/skin/female/female1.png"));
+        femalemap.put(2, new ResourceLocation("tartarus:textures/entity/player/skin/female/female2.png"));
+        femalemap.put(3, new ResourceLocation("tartarus:textures/entity/player/skin/female/female3.png"));
+        femalemap.put(4, new ResourceLocation("tartarus:textures/entity/player/skin/female/female4.png"));
+
+        HashMap<Integer, ResourceLocation> malemap = new HashMap<Integer, ResourceLocation>();
+        malemap.put(0, new ResourceLocation("tartarus:textures/entity/player/skin/random_skin.png"));
+        malemap.put(1, new ResourceLocation("tartarus:textures/entity/player/skin/male/male1.png"));
+        malemap.put(2, new ResourceLocation("tartarus:textures/entity/player/skin/male/male2.png"));
+        malemap.put(3, new ResourceLocation("tartarus:textures/entity/player/skin/male/male3.png"));
+        malemap.put(4, new ResourceLocation("tartarus:textures/entity/player/skin/male/male4.png"));
+
+        if (gender == 1) {
+            location = malemap.get(skin);
+        }
+        if (gender == 2 ){
+            location = femalemap.get(skin);
+        }
+        return location;
     }
 }

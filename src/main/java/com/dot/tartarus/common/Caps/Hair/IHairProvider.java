@@ -1,6 +1,6 @@
-package com.dot.tartarus.common.Caps.Skin;
+package com.dot.tartarus.common.Caps.Hair;
 
-import com.dot.tartarus.common.Caps.Skin.ISkin;
+import com.dot.tartarus.common.Caps.Gender.IGender;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,22 +13,22 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class ISkinProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<ISkin> Skin = CapabilityManager.get(new CapabilityToken<ISkin>() {});
+public class IHairProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<IHair> Hair = CapabilityManager.get(new CapabilityToken<IHair>() {});
 
-    private ISkin skin = null;
-    private final LazyOptional<ISkin> optional = LazyOptional.of(this::createSkin);
+    private IHair hair = null;
+    private final LazyOptional<IHair> optional = LazyOptional.of(this::createHair);
 
-    private ISkin createSkin(){
-        if(this.skin == null) {
-            this.skin = new ISkin();
+    private IHair createHair(){
+        if(this.hair == null) {
+            this.hair = new IHair();
         }
-        return this.skin;
+        return this.hair;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == Skin) {
+        if(cap == Hair) {
             return optional.cast();
         }
 
@@ -38,13 +38,12 @@ public class ISkinProvider implements ICapabilityProvider, INBTSerializable<Comp
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createSkin().saveNBTData(nbt);
+        createHair().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createSkin().loadNBTData(nbt);
+        createHair().loadNBTData(nbt);
     }
 }
-

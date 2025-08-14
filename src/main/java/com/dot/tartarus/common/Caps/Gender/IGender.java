@@ -10,6 +10,7 @@ public class IGender {
     }
     public void setGender(int set){
         this.Gender = set;
+
     }
 
     public void copyFrom(IGender source){
