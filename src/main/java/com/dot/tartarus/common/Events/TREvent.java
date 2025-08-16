@@ -58,6 +58,7 @@ public class TREvent {
             });
         }
     }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side == LogicalSide.SERVER) {

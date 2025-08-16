@@ -2,17 +2,22 @@ package com.dot.tartarus.Mixin;
 
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
+import com.dot.tartarus.common.Caps.Skin.SkinUtil;
 import com.mojang.authlib.GameProfile;
+import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 @Mixin(AbstractClientPlayer.class)
@@ -45,13 +50,16 @@ public abstract class MixinAbstractClientPlayer extends Player {
         malemap.put(2, new ResourceLocation("tartarus:textures/entity/player/skin/male/male2.png"));
         malemap.put(3, new ResourceLocation("tartarus:textures/entity/player/skin/male/male3.png"));
         malemap.put(4, new ResourceLocation("tartarus:textures/entity/player/skin/male/male4.png"));
+        switch(gender){
+            case 1:
+                location = malemap.get(skin);
+                break;
+            case 2:
+                location = femalemap.get(skin);
+                break;
+        }
 
-        if (gender == 1) {
-            location = malemap.get(skin);
-        }
-        if (gender == 2 ){
-            location = femalemap.get(skin);
-        }
-        return location;
+
+        return SkinUtil.getOrCreateSkin(player.getUUID(), location);
     }
 }
