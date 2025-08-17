@@ -1,6 +1,5 @@
-package com.dot.tartarus.common.Utils;
+package com.dot.tartarus.Network.Packets;
 
-import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;

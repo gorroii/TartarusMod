@@ -3,7 +3,6 @@ package com.dot.tartarus.common.Commands;
 import com.dot.tartarus.Network.Packets.GenderPacket;
 import com.dot.tartarus.Network.Packets.HairPacket;
 import com.dot.tartarus.Network.Packets.SkinPacket;
-import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
@@ -19,7 +18,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
 
-import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
+import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendCapabilitiesToAll;
 
 public class SetCharacterCommand {
 

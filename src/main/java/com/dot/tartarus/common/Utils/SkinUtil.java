@@ -1,6 +1,7 @@
 package com.dot.tartarus.common.Utils;
 
 import com.dot.tartarus.TartarusMod;
+import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -8,11 +9,13 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class SkinUtil {
+
 
     private static final Map<UUID, ResourceLocation> cache = new HashMap<>();
 
@@ -25,9 +28,12 @@ public class SkinUtil {
 
         if (cache.containsKey(uuid)) {
             return cache.get(uuid);
-        }
+            }
+
 
         Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+
         TextureManager tm = mc.getTextureManager();
 
         // compute ResourceLocation
@@ -77,6 +83,7 @@ public class SkinUtil {
             // cache for future use
             cache.put(uuid, loc);
 
+
             return loc;
 
         } catch (Exception e) {
@@ -90,4 +97,5 @@ public class SkinUtil {
         UUID uuid = player.getUUID();
         cache.remove(uuid);
     }
+
 }

@@ -3,31 +3,27 @@ package com.dot.tartarus.common.Events;
 import com.dot.tartarus.Network.Packets.GenderPacket;
 import com.dot.tartarus.Network.Packets.HairPacket;
 import com.dot.tartarus.Network.Packets.SkinPacket;
-import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.TartarusMod;
+import com.dot.tartarus.common.Caps.Edited.IEditedProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
-import com.dot.tartarus.common.Caps.Hair.IHair;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
-import com.dot.tartarus.common.Commands.SetCharacterCommand;
 import com.dot.tartarus.common.Utils.SkinUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
-import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendAllCapabilitiesTo;
-import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
+import java.util.Timer;
+
+import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendAllCapabilitiesTo;
+import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendCapabilitiesToAll;
 
 @Mod.EventBusSubscriber(modid = TartarusMod.MOD_ID)
 public class TREvent {
@@ -36,59 +32,71 @@ public class TREvent {
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player player) {
-            if (!player.getCapability(IGenderProvider.Gender).isPresent()) {
+
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "gender"), new IGenderProvider());
-            }
-            if (!player.getCapability(ISkinProvider.Skin).isPresent()) {
+
+
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "skin"), new ISkinProvider());
-            }
-            if (!player.getCapability(IHairProvider.Hair).isPresent()) {
+
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "hair"), new IHairProvider());
-            }
+
+                event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "edited"), new IEditedProvider());
+
+
         }
     }
 
     // Copy capabilities on death/respawn and sync to client
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        if (event.isWasDeath()) {
+
             Player oldPlayer = event.getOriginal();
-            ServerPlayer newPlayer = (ServerPlayer) event.getOriginal();
+            Player newPlayer = event.getEntity();
+            event.getOriginal().reviveCaps();
+            int oldgender = oldPlayer.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
+            int newgender = newPlayer.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
 
-            SkinUtil.ClearCache(oldPlayer);
 
-            // Copy gender
+
             oldPlayer.getCapability(IGenderProvider.Gender).ifPresent(oldCap ->
-                    newPlayer.getCapability(IGenderProvider.Gender).ifPresent(newCap -> {
-                        newCap.copyFrom(oldCap);
-                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
-                                new GenderPacket(newCap.getGender()));
-                    })
+                    newPlayer.getCapability(IGenderProvider.Gender).ifPresent(newCap ->
+                            newCap.copyFrom(oldCap)
+                    )
             );
 
-            // Copy skin
             oldPlayer.getCapability(ISkinProvider.Skin).ifPresent(oldCap ->
-                    newPlayer.getCapability(ISkinProvider.Skin).ifPresent(newCap -> {
-                        newCap.copyFrom(oldCap);
-                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
-                                new SkinPacket(newCap.getSkin()));
-                    })
+                    newPlayer.getCapability(ISkinProvider.Skin).ifPresent(newCap ->
+                            newCap.copyFrom(oldCap)
+                    )
             );
 
-            // Copy hair
             oldPlayer.getCapability(IHairProvider.Hair).ifPresent(oldCap ->
-                    newPlayer.getCapability(IHairProvider.Hair).ifPresent(newCap -> {
-                        newCap.copyFrom(oldCap);
-                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
-                                new HairPacket(newCap.getHair()));
+                    newPlayer.getCapability(IHairProvider.Hair).ifPresent(newCap ->
+                            newCap.copyFrom(oldCap)
+                    )
+            );
 
-
-                    })
+            oldPlayer.getCapability(IEditedProvider.Edited).ifPresent(oldCap ->
+                    newPlayer.getCapability(IEditedProvider.Edited).ifPresent(newCap ->
+                            newCap.copyFrom(oldCap)
+                    )
 
             );
-            sendCapabilitiesToAll(newPlayer);
+            SkinUtil.ClearCache(newPlayer);
+            event.getOriginal().invalidateCaps();
+
+
+
+
         }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+
+
     }
+
+
 
     // Clear cached skins on login
     @SubscribeEvent
@@ -112,5 +120,6 @@ public class TREvent {
 
         sendCapabilitiesToAll(player); // send joined’s data to everyone
         sendAllCapabilitiesTo(player);
+
     }
 }
