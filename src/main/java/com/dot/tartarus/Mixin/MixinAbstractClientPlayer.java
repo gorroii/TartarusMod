@@ -2,22 +2,20 @@ package com.dot.tartarus.Mixin;
 
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
-import com.dot.tartarus.common.Caps.Skin.SkinUtil;
+import com.dot.tartarus.common.Utils.SkinUtil;
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 @Mixin(AbstractClientPlayer.class)
@@ -25,16 +23,26 @@ public abstract class MixinAbstractClientPlayer extends Player {
     public MixinAbstractClientPlayer(Level pLevel, BlockPos pPos, float pYRot, GameProfile pGameProfile) {
         super(pLevel, pPos, pYRot, pGameProfile);
     }
+    @Shadow
+    private PlayerInfo playerInfo;
+    @Nullable
+    protected PlayerInfo getPlayerInfo() {
+        if (this.playerInfo == null) {
+            this.playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(this.getUUID());
+        }
+
+        return this.playerInfo;
+    }
     /**
      * @author Dot
      * @reason To change where it fetch the skin texture
      */
     @Overwrite
     public ResourceLocation getSkinTextureLocation(){
-        Player player = Minecraft.getInstance().player;
+        Player player = (Player) (Object) this;
         ResourceLocation location = null;
         int gender = player.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
-        int skin = player.getCapability(ISkinProvider.Skin).map(gendercap -> gendercap.getSkin()).orElse(null);
+        int skin = player.getCapability(ISkinProvider.Skin).map(skincap -> skincap.getSkin()).orElse(null);
 
 
         HashMap<Integer, ResourceLocation> femalemap = new HashMap<Integer, ResourceLocation>();
@@ -57,9 +65,13 @@ public abstract class MixinAbstractClientPlayer extends Player {
             case 2:
                 location = femalemap.get(skin);
                 break;
+            case 0:
+                location = femalemap.get(skin);
+                break;
         }
 
 
         return SkinUtil.getOrCreateSkin(player.getUUID(), location);
     }
+
 }

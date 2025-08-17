@@ -3,6 +3,7 @@ package com.dot.tartarus.Network;
 import com.dot.tartarus.Network.Packets.GenderPacket;
 import com.dot.tartarus.Network.Packets.HairPacket;
 import com.dot.tartarus.Network.Packets.SkinPacket;
+import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.TartarusMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
@@ -26,5 +27,6 @@ public class TRNetwork {
         CHANNEL.registerMessage(nextId(), GenderPacket.class, GenderPacket::encode, GenderPacket::decode,GenderPacket::handle);
         CHANNEL.registerMessage(nextId(), SkinPacket.class, SkinPacket::encode, SkinPacket::decode, SkinPacket::handle);
         CHANNEL.registerMessage(nextId(), HairPacket.class, HairPacket::encode, HairPacket::decode, HairPacket::handle);
+        CHANNEL.registerMessage(nextId(), SyncPlayerCapsPacket.class, SyncPlayerCapsPacket::encode, SyncPlayerCapsPacket::decode, SyncPlayerCapsPacket::handle);
     }
 }

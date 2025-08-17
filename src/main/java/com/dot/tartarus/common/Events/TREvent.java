@@ -3,18 +3,22 @@ package com.dot.tartarus.common.Events;
 import com.dot.tartarus.Network.Packets.GenderPacket;
 import com.dot.tartarus.Network.Packets.HairPacket;
 import com.dot.tartarus.Network.Packets.SkinPacket;
+import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHair;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
+import com.dot.tartarus.common.Commands.SetCharacterCommand;
+import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,64 +26,91 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendAllCapabilitiesTo;
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
+
 @Mod.EventBusSubscriber(modid = TartarusMod.MOD_ID)
 public class TREvent {
+
+    // Attach capabilities to players
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof Player) {
-            if(!event.getObject().getCapability(IGenderProvider.Gender).isPresent()) {
+        if (event.getObject() instanceof Player player) {
+            if (!player.getCapability(IGenderProvider.Gender).isPresent()) {
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "gender"), new IGenderProvider());
             }
-            if(!event.getObject().getCapability(ISkinProvider.Skin).isPresent()) {
+            if (!player.getCapability(ISkinProvider.Skin).isPresent()) {
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "skin"), new ISkinProvider());
             }
-            if(!event.getObject().getCapability(IHairProvider.Hair).isPresent()) {
+            if (!player.getCapability(IHairProvider.Hair).isPresent()) {
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "hair"), new IHairProvider());
             }
         }
     }
+
+    // Copy capabilities on death/respawn and sync to client
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        if(event.isWasDeath()) {
-            event.getOriginal().getCapability(IGenderProvider.Gender).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(IGenderProvider.Gender).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
-            });
-            event.getOriginal().getCapability(ISkinProvider.Skin).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(ISkinProvider.Skin).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
-            });
-            event.getOriginal().getCapability(IHairProvider.Hair).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(IHairProvider.Hair).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
-            });
+        if (event.isWasDeath()) {
+            Player oldPlayer = event.getOriginal();
+            ServerPlayer newPlayer = (ServerPlayer) event.getOriginal();
+
+            SkinUtil.ClearCache(oldPlayer);
+
+            // Copy gender
+            oldPlayer.getCapability(IGenderProvider.Gender).ifPresent(oldCap ->
+                    newPlayer.getCapability(IGenderProvider.Gender).ifPresent(newCap -> {
+                        newCap.copyFrom(oldCap);
+                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
+                                new GenderPacket(newCap.getGender()));
+                    })
+            );
+
+            // Copy skin
+            oldPlayer.getCapability(ISkinProvider.Skin).ifPresent(oldCap ->
+                    newPlayer.getCapability(ISkinProvider.Skin).ifPresent(newCap -> {
+                        newCap.copyFrom(oldCap);
+                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
+                                new SkinPacket(newCap.getSkin()));
+                    })
+            );
+
+            // Copy hair
+            oldPlayer.getCapability(IHairProvider.Hair).ifPresent(oldCap ->
+                    newPlayer.getCapability(IHairProvider.Hair).ifPresent(newCap -> {
+                        newCap.copyFrom(oldCap);
+                        TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> newPlayer),
+                                new HairPacket(newCap.getHair()));
+
+
+                    })
+
+            );
+            sendCapabilitiesToAll(newPlayer);
         }
     }
 
+    // Clear cached skins on login
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side == LogicalSide.SERVER) {
-            event.player.getCapability(IGenderProvider.Gender).ifPresent(genderCap -> genderCap.setGender(1));
+    public static void onLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        SkinUtil.ClearCache(event.getEntity());
 
-            TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> {
-                return (ServerPlayer)event.player;
-            }), new GenderPacket(1));
+        // Also send full capability sync to client on login
+        Player player = event.getEntity();
+        player.getCapability(IGenderProvider.Gender).ifPresent(cap ->
+                TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+                        new GenderPacket(cap.getGender()))
+        );
+        player.getCapability(ISkinProvider.Skin).ifPresent(cap ->
+                TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+                        new SkinPacket(cap.getSkin()))
+        );
+        player.getCapability(IHairProvider.Hair).ifPresent(cap ->
+                TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+                        new HairPacket(cap.getHair()))
+        );
 
-            event.player.getCapability(ISkinProvider.Skin).ifPresent(skinCap -> skinCap.setSkin(2));
-
-            TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> {
-                return (ServerPlayer)event.player;
-            }), new SkinPacket(2));
-
-            event.player.getCapability(IHairProvider.Hair).ifPresent(hairCap -> hairCap.setHair(2));
-
-            TRNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> {
-                return (ServerPlayer)event.player;
-            }), new HairPacket(2));
-        }
+        sendCapabilitiesToAll(player); // send joined’s data to everyone
+        sendAllCapabilitiesTo(player);
     }
-
 }

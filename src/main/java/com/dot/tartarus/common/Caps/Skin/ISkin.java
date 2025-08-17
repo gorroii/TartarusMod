@@ -4,23 +4,25 @@ package com.dot.tartarus.common.Caps.Skin;
 import net.minecraft.nbt.CompoundTag;
 
 public class ISkin {
-    private int Skin;
+    private int skin;
 
-    public int getSkin(){
-        return Skin;
-    }
-    public void setSkin(int set){
-        this.Skin = set;
-
+    public int getSkin() {
+        return skin;
     }
 
-    public void copyFrom(ISkin source){
-        this.Skin = source.Skin;
+    public void setSkin(int skin) {
+        this.skin = skin;
     }
-    public void saveNBTData(CompoundTag nbt){
-        nbt.putInt("skin", Skin);
+
+    public void copyFrom(ISkin source) {
+        this.skin = source.skin;
     }
-    public void loadNBTData(CompoundTag nbt){
-        Skin = nbt.getInt("skin");
+
+    public void saveNBTData(CompoundTag nbt) {
+        nbt.putInt("skin", skin);
+    }
+
+    public void loadNBTData(CompoundTag nbt) {
+        skin = nbt.getInt("skin");
     }
 }

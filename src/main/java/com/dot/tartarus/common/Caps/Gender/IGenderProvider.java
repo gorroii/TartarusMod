@@ -14,24 +14,19 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class IGenderProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<IGender> Gender = CapabilityManager.get(new CapabilityToken<IGender>() {});
+    public static Capability<IGender> Gender = CapabilityManager.get(new CapabilityToken<>() {});
 
     private IGender gender = null;
     private final LazyOptional<IGender> optional = LazyOptional.of(this::createGender);
 
-    private IGender createGender(){
-        if(this.gender == null) {
-            this.gender = new IGender();
-        }
-        return this.gender;
+    private IGender createGender() {
+        if (gender == null) gender = new IGender();
+        return gender;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == Gender) {
-            return optional.cast();
-        }
-
+        if (cap == Gender) return optional.cast();
         return LazyOptional.empty();
     }
 
