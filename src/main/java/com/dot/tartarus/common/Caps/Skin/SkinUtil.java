@@ -36,14 +36,18 @@ public class SkinUtil {
             for (int x = 0; x < image.getWidth(); x++) {
                 for (int y = 0; y < image.getHeight(); y++) {
                     int pixel = (torso_cloth.getPixelRGBA(x,y));
-                    Color c = new Color(pixel);
-                    int alpha = c.getAlpha();
+                    int torsoPixel = torso_cloth.getPixelRGBA(x, y);
 
+                    // unpack ABGR
+                    int a = (torsoPixel >> 24) & 0xFF;
+                    int b = (torsoPixel >> 16) & 0xFF;
+                    int g = (torsoPixel >> 8)  & 0xFF;
+                    int r = torsoPixel & 0xFF;
 
-                    if (alpha < 255){
-                        break;
-                    } else {
-                        image.setPixelRGBA(x, y, pixel);
+                    if (a > 0) {
+                        // you can choose blending: here simple overwrite if pixel has alpha
+                        int newPixel = (a << 24) | (b << 16) | (g << 8) | r;
+                        image.setPixelRGBA(x, y, newPixel);
                     }
                 }
             }
