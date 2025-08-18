@@ -1,12 +1,16 @@
 package com.dot.tartarus.Network.Packets;
 
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
+import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
+
+import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendAllCapabilitiesTo;
+import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendCapabilitiesToAll;
 
 public class GenderPacket {
     private final float gender;
@@ -30,6 +34,9 @@ public class GenderPacket {
             if (player != null) {
                 ((Player)player).getCapability(IGenderProvider.Gender).ifPresent((genderCap) -> {
                     genderCap.setGender((int)msg.gender);
+                    sendAllCapabilitiesTo(player);
+                    sendCapabilitiesToAll(player);
+                    SkinUtil.ClearCache(player);
                 });
             }
 

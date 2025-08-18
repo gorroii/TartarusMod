@@ -82,8 +82,13 @@ public class TREvent {
                     )
 
             );
-            SkinUtil.ClearCache(newPlayer);
-            event.getOriginal().invalidateCaps();
+
+
+
+
+                event.getOriginal().invalidateCaps();
+
+
 
 
 
