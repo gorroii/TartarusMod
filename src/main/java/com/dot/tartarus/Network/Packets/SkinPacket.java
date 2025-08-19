@@ -1,6 +1,5 @@
 package com.dot.tartarus.Network.Packets;
 
-import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
@@ -10,8 +9,8 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendAllCapabilitiesTo;
-import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendCapabilitiesToAll;
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendAllCapabilitiesTo;
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
 
 public class SkinPacket {
     private final float skin;

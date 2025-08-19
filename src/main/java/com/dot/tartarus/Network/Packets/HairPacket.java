@@ -1,18 +1,16 @@
 package com.dot.tartarus.Network.Packets;
 
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
-import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendAllCapabilitiesTo;
-import static com.dot.tartarus.Network.Packets.PacketSyncUtils.sendCapabilitiesToAll;
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendAllCapabilitiesTo;
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
 
 public class HairPacket {
     private final float hair;

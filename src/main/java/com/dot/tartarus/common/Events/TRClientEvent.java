@@ -17,7 +17,8 @@ public class TRClientEvent {
         Player player = event.getPlayer();
         int editor = player.getCapability(IEditedProvider.Edited).map(editedcap -> editedcap.getEdited()).orElse(null);
         if(editor !=1){
-            Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new CharacterEditor()));
+            //Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new CharacterEditor()));
         }
     }
+
 }

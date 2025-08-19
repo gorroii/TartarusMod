@@ -50,6 +50,9 @@ public class ModItems {
     public static final RegistryObject<Item> INCOMPLETE_SG550 = ITEMS.register("incomplete_sg550",
             () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
 
+    public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+
 
 
 

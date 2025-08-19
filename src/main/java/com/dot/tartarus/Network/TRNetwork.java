@@ -1,12 +1,10 @@
 package com.dot.tartarus.Network;
 
-import com.dot.tartarus.Network.Packets.GenderPacket;
-import com.dot.tartarus.Network.Packets.HairPacket;
-import com.dot.tartarus.Network.Packets.SkinPacket;
-import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
+import com.dot.tartarus.Network.Packets.*;
 import com.dot.tartarus.TartarusMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.IndexedMessageCodec;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class TRNetwork {
@@ -28,5 +26,11 @@ public class TRNetwork {
         CHANNEL.registerMessage(nextId(), SkinPacket.class, SkinPacket::encode, SkinPacket::decode, SkinPacket::handle);
         CHANNEL.registerMessage(nextId(), HairPacket.class, HairPacket::encode, HairPacket::decode, HairPacket::handle);
         CHANNEL.registerMessage(nextId(), SyncPlayerCapsPacket.class, SyncPlayerCapsPacket::encode, SyncPlayerCapsPacket::decode, SyncPlayerCapsPacket::handle);
+        CHANNEL.registerMessage(nextId(), SyncClothesCap.class, SyncClothesCap::encode, SyncClothesCap::decode, SyncClothesCap::handle);
+        CHANNEL.registerMessage(nextId(), OpenInventoryPacket.class,
+                OpenInventoryPacket::encode,
+                OpenInventoryPacket::decode,
+                OpenInventoryPacket::handle);
+
     }
 }
