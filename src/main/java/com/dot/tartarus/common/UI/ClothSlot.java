@@ -16,7 +16,7 @@ public class ClothSlot extends SlotItemHandler {
 
     public ClothSlot(IItemHandler pContainer, int pIndex, int pX, int pY, Player player) {
         super(pContainer, pIndex, pX, pY);
-        this.player = player; // ✅ сохраняем
+        this.player = player;
         this.slot = ClothesSlot.getFromID(pIndex);
     }
 

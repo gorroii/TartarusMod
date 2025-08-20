@@ -17,7 +17,7 @@ public class InventoryScreen extends AbstractContainerScreen<InventoryMenu> {
     private static final ResourceLocation SHIRT_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/shirt.png");
     private static final ResourceLocation PANTS_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/pants.png");
     private static final ResourceLocation SHOES_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/shoes.png");
-    private static final ResourceLocation BACK_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/back.png");
+    private static final ResourceLocation BRA_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/bra.png");
     private static final ResourceLocation JACKET_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/jacket.png");
     private static final ResourceLocation GLOVES_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/gloves.png");
     private static final ResourceLocation PANTIES_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/wrist.png");
@@ -57,7 +57,7 @@ public class InventoryScreen extends AbstractContainerScreen<InventoryMenu> {
                 pGuiGraphics.blit(SHOES_SLOT_LOCATION, relX + 80, relY + 62, 0, 0, 16, 16);
             }
             if(inv.getInventory().getStackInSlot(4).isEmpty()) {
-                pGuiGraphics.blit(BACK_SLOT_LOCATION, relX + 98, relY + 26, 0, 0, 16, 16);
+                pGuiGraphics.blit(BRA_SLOT_LOCATION, relX + 98, relY + 26, 0, 0, 16, 16);
             }
             if(inv.getInventory().getStackInSlot(5).isEmpty()) {
                 pGuiGraphics.blit(JACKET_SLOT_LOCATION, relX + 116, relY + 26, 0, 0, 16, 16);

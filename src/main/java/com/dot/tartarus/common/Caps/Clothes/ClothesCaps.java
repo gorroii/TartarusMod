@@ -2,6 +2,7 @@ package com.dot.tartarus.common.Caps.Clothes;
 
 import com.dot.tartarus.Network.Packets.SyncClothesCap;
 import com.dot.tartarus.Network.TRNetwork;
+import com.dot.tartarus.common.Utils.PacketSyncUtils;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -20,6 +21,7 @@ public class ClothesCaps {
         protected void onContentsChanged(int slot) {
             if (player != null && !player.level().isClientSide) {
                 syncToAll(player.level());
+                PacketSyncUtils.sendClothesToAll(player);
             }
         }
     };
@@ -35,7 +37,7 @@ public class ClothesCaps {
     }
     public void syncToAll(Level level) {
         level.players().forEach(playerEntity -> TRNetwork.CHANNEL.sendTo(new SyncClothesCap(writeNBT(), player.getId()), ((ServerPlayer) playerEntity).connection.connection, NetworkDirection.PLAY_TO_CLIENT));
-        SkinUtil.ClearCache(player);
+
 
     }
 

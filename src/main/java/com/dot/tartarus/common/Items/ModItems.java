@@ -52,6 +52,14 @@ public class ModItems {
 
     public static final RegistryObject<ClothItem> RANDOM = ITEMS.register("random",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> SILVER_BRA = ITEMS.register("silver_bra",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
+    public static final RegistryObject<ClothItem> LOW_JEANS = ITEMS.register("low_jeans",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTS));
+    public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> PURPLE_TOP = ITEMS.register("purple_top",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
 
 
 

@@ -15,7 +15,7 @@ public class ModCreativeModTabs {public static final DeferredRegister<CreativeMo
 
     public static void register(IEventBus eventBus) {
 
-        final RegistryObject<CreativeModeTab> KHORN_TAB = CREATIVE_MODE_TABS.register("tartarus",
+        final RegistryObject<CreativeModeTab> TARTARUS_TAB = CREATIVE_MODE_TABS.register("tartarus",
                 () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.FINISHED_ARASAKA_MECHANISM.get()))
                         .title(Component.translatable("creativetab.tartarus"))
                         .displayItems((itemDisplayParameters, output) -> {

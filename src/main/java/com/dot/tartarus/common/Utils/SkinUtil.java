@@ -23,7 +23,7 @@ public class SkinUtil {
     private static final Map<UUID, ResourceLocation> cache = new HashMap<>();
 
     // Manual draw order for slots
-    private static final int[] DRAW_ORDER = { 3, 0, 5, 1, 2, 8, 7, 6, 4 };
+    private static final int[] DRAW_ORDER = { 0, 7, 4, 3, 6, 2, 8, 1, 5 };
 
     /**
      * Returns a dynamic player skin with overlays applied.
@@ -36,7 +36,8 @@ public class SkinUtil {
         }
 
         Minecraft mc = Minecraft.getInstance();
-        Player player = mc.player;
+        Player player = mc.level.getPlayerByUUID(uuid);
+
 
         TextureManager tm = mc.getTextureManager();
 

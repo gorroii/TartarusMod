@@ -1,7 +1,7 @@
 package com.dot.tartarus.common.Items;
 
 public enum ClothesSlot {
-    HEAD(0),SHIRT(1),PANTS(2),SHOES(3),BACK(4),JACKET(5),GLOVES(6),PANTIES(7),BELT(8);
+    HEAD(0),SHIRT(1),PANTS(2),SHOES(3), BRA(4),JACKET(5),GLOVES(6),PANTIES(7),BELT(8);
 
     private int id;
 
@@ -25,7 +25,7 @@ public enum ClothesSlot {
             case 3:
                 return SHOES;
             case 4:
-                return BACK;
+                return BRA;
             case 5:
                 return JACKET;
             case 6:

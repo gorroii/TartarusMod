@@ -32,5 +32,6 @@ public class TRNetwork {
                 OpenInventoryPacket::decode,
                 OpenInventoryPacket::handle);
 
+
     }
 }

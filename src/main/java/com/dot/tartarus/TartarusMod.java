@@ -52,7 +52,7 @@ public class TartarusMod
         // Client setup
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             modEventBus.addListener(this::registerKey);
-            modEventBus.addListener(this::doClientStuff); // <-- правильный шины
+            modEventBus.addListener(this::doClientStuff);
             MinecraftForge.EVENT_BUS.addListener(this::keyPressed);
         });
 
