@@ -32,6 +32,11 @@ public class TRNetwork {
                 OpenInventoryPacket::decode,
                 OpenInventoryPacket::handle);
 
+        CHANNEL.registerMessage(nextId(), ClearCachePacket.class,
+                ClearCachePacket::encode,
+                ClearCachePacket::decode,
+                ClearCachePacket::handle);
+
 
     }
 }

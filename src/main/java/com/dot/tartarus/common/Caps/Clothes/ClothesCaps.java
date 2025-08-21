@@ -1,5 +1,6 @@
 package com.dot.tartarus.common.Caps.Clothes;
 
+import com.dot.tartarus.Network.Packets.ClearCachePacket;
 import com.dot.tartarus.Network.Packets.SyncClothesCap;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Utils.PacketSyncUtils;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.PacketDistributor;
 
 public class ClothesCaps {
 
@@ -20,8 +22,19 @@ public class ClothesCaps {
         @Override
         protected void onContentsChanged(int slot) {
             if (player != null && !player.level().isClientSide) {
-                syncToAll(player.level());
+                // Данные текущего игрока → всем
                 PacketSyncUtils.sendClothesToAll(player);
+                PacketSyncUtils.sendCapabilitiesToAll(player);
+
+                // Данные всех игроков → текущему
+                PacketSyncUtils.sendAllClothesTo(player);
+                PacketSyncUtils.sendAllCapabilitiesTo(player);
+
+                // Сброс кеша скина
+                TRNetwork.CHANNEL.send(
+                        PacketDistributor.ALL.noArg(),
+                        new ClearCachePacket(player.getUUID())
+                );
             }
         }
     };
@@ -64,11 +77,7 @@ public class ClothesCaps {
 
             for (int i = 0; i < inventoryCompound.size(); i++) {
                 ItemStack tempStack = ItemStack.of(inventoryCompound.getCompound(String.valueOf(i)));
-                if (tempStack.getItem() == inventory.getStackInSlot(i).getItem()) {
-                    inventory.getStackInSlot(i).deserializeNBT(inventoryCompound.getCompound(String.valueOf(i)));
-                } else
-                    inventory.insertItem(i, tempStack, false);
-
+                inventory.insertItem(i, tempStack, false); // always insert, triggers onContentsChanged
             }
         }
     }

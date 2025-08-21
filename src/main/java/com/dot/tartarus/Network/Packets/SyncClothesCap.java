@@ -34,6 +34,7 @@ public class SyncClothesCap {
     public static void handle(SyncClothesCap msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().level.getEntity(msg.entityId);
+
             if (entity != null) {
 
                 entity.getCapability(ClothesProvider.CLOTHES_INVENTORY).ifPresent(cap -> cap.readNBT(msg.invTag.get("inventory")));

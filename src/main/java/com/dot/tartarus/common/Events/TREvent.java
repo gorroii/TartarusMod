@@ -133,6 +133,7 @@ public class TREvent {
 
         Level level = event.getEntity().level();
 
+
         // Also send full capability sync to client on login
         Player player = event.getEntity();
         player.getCapability(IGenderProvider.Gender).ifPresent(cap ->
