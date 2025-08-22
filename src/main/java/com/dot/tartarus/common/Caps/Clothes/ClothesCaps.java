@@ -7,6 +7,7 @@ import com.dot.tartarus.common.Utils.PacketSyncUtils;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,11 +25,6 @@ public class ClothesCaps {
             if (player != null && !player.level().isClientSide) {
                 // Данные текущего игрока → всем
                 PacketSyncUtils.sendClothesToAll(player);
-                PacketSyncUtils.sendCapabilitiesToAll(player);
-
-                // Данные всех игроков → текущему
-                PacketSyncUtils.sendAllClothesTo(player);
-                PacketSyncUtils.sendAllCapabilitiesTo(player);
 
                 // Сброс кеша скина
                 TRNetwork.CHANNEL.send(
@@ -71,14 +67,26 @@ public class ClothesCaps {
         return tag;
     }
 
-    public void readNBT(Tag compound) {
-        if(compound instanceof CompoundTag && ((CompoundTag) compound).contains("inventory")){
-            CompoundTag inventoryCompound = ((CompoundTag) compound).getCompound("inventory");
+    public void readNBT(Tag tag) {
+        if (!(tag instanceof CompoundTag compound) || !compound.contains("inventory", Tag.TAG_COMPOUND)) {
+            return;
+        }
 
-            for (int i = 0; i < inventoryCompound.size(); i++) {
-                ItemStack tempStack = ItemStack.of(inventoryCompound.getCompound(String.valueOf(i)));
-                inventory.insertItem(i, tempStack, false); // always insert, triggers onContentsChanged
+        CompoundTag inventoryTag = compound.getCompound("inventory");
+
+
+        for (int i = 0; i < inventory.getSlots(); i++) {
+            inventory.extractItem(i, 1, false);
+        }
+
+
+        for (int i = 0; i < 9; i++) {
+            String key = String.valueOf(i);
+            if (inventoryTag.contains(key, Tag.TAG_COMPOUND)) {
+                ItemStack stack = ItemStack.of(inventoryTag.getCompound(key));
+                inventory.insertItem(i, stack, false); // ✅ Direct assignment
             }
+            // If not present, remains EMPTY (already cleared above)
         }
     }
 }
