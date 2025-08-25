@@ -2,6 +2,7 @@ package com.dot.tartarus.common.Utils;
 
 import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
+import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
@@ -12,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,6 @@ public class SkinUtil {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.level.getPlayerByUUID(uuid);
 
-
         TextureManager tm = mc.getTextureManager();
 
         // Compute ResourceLocation
@@ -54,20 +53,42 @@ public class SkinUtil {
             NativeImage image = NativeImage.read(mc.getResourceManager()
                     .getResource(baseSkin).orElseThrow().open());
 
-            //  Get clothes inventory from your capability
+            //  Get clothes inventory from capability
             player.getCapability(ClothesProvider.CLOTHES_INVENTORY).ifPresent(cap -> {
                 IItemHandler inv = cap.getInventory();
+
+                // get gender string once
+                Integer genderInt = player.getCapability(IGenderProvider.Gender)
+                        .map(gendercap -> gendercap.getGender())
+                        .orElse(0); // fallback 0
+                String genderStr = (genderInt == 1) ? "male" : "female";
 
                 for (int slot : DRAW_ORDER) {
                     ItemStack stack = inv.getStackInSlot(slot);
                     if (stack.isEmpty()) continue;
 
-                    // Example: each clothing item has its own overlay texture
-                    // You might want a custom system (like IClothingItem interface) instead
-                    ResourceLocation overlayLoc = new ResourceLocation(
-                            TartarusMod.MOD_ID,
-                            "textures/entity/player/clothes/" + stack.getItem().getDescriptionId().replace("item.tartarus.", "") + ".png"
-                    );
+                    Integer caps = stack.getCapability(ClothesStateProvider.State)
+                            .map(statecap -> statecap.getState())
+                            .orElse(null);
+                    String capas = (caps != null && caps != 0) ? String.valueOf(caps) : "";
+
+                    // choose path based on slot
+                    ResourceLocation overlayLoc;
+                    if (slot == 1 || slot == 5) {
+                        overlayLoc = new ResourceLocation(
+                                TartarusMod.MOD_ID,
+                                "textures/entity/player/clothes/" + genderStr + "/" +
+                                        stack.getItem().getDescriptionId().replace("item.tartarus.", "") +
+                                        capas + ".png"
+                        );
+                    } else {
+                        overlayLoc = new ResourceLocation(
+                                TartarusMod.MOD_ID,
+                                "textures/entity/player/clothes/" +
+                                        stack.getItem().getDescriptionId().replace("item.tartarus.", "") +
+                                        capas + ".png"
+                        );
+                    }
 
                     try (InputStream input = mc.getResourceManager().getResource(overlayLoc).orElseThrow().open()) {
                         NativeImage overlay = NativeImage.read(input);
@@ -78,17 +99,41 @@ public class SkinUtil {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 int overlayPixel = overlay.getPixelRGBA(x, y);
+                                int basePixel = image.getPixelRGBA(x, y);
 
-                                int a = (overlayPixel >> 24) & 0xFF;
-                                if (a > 0) {
-                                    image.setPixelRGBA(x, y, overlayPixel);
-                                }
+                                int aO = (overlayPixel >> 24) & 0xFF;
+                                if (aO == 0) continue;
+
+                                int rO = (overlayPixel >> 16) & 0xFF;
+                                int gO = (overlayPixel >> 8) & 0xFF;
+                                int bO = overlayPixel & 0xFF;
+
+                                int aB = (basePixel >> 24) & 0xFF;
+                                int rB = (basePixel >> 16) & 0xFF;
+                                int gB = (basePixel >> 8) & 0xFF;
+                                int bB = basePixel & 0xFF;
+
+                                float alphaO = aO / 255f;
+                                float alphaB = aB / 255f;
+
+                                float outA = alphaO + alphaB * (1 - alphaO);
+                                float outR = (rO * alphaO + rB * alphaB * (1 - alphaO)) / outA;
+                                float outG = (gO * alphaO + gB * alphaB * (1 - alphaO)) / outA;
+                                float outB = (bO * alphaO + bB * alphaB * (1 - alphaO)) / outA;
+
+                                int blended =
+                                        ((int) (outA * 255) << 24) |
+                                                ((int) (outR) << 16) |
+                                                ((int) (outG) << 8) |
+                                                ((int) (outB));
+
+                                image.setPixelRGBA(x, y, blended);
                             }
                         }
 
                         overlay.close();
                     } catch (Exception ignored) {
-                        // if texture not found → skip silently
+                        // texture not found → skip
                     }
                 }
             });

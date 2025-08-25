@@ -1,24 +1,34 @@
 package com.dot.tartarus;
 
 import com.dot.tartarus.Client.Keybinds;
+import com.dot.tartarus.Network.Packets.ClearCachePacket;
 import com.dot.tartarus.Network.Packets.OpenInventoryPacket;
+import com.dot.tartarus.Network.Packets.SendStateChangePacket;
+import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Blocks.ModBlocks;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
+import com.dot.tartarus.common.Gson.MaxStateClothManager;
 import com.dot.tartarus.common.Items.ModCreativeModTabs;
 import com.dot.tartarus.common.Items.ModItems;
 
 
+import com.dot.tartarus.common.Sounds.TRSounds;
 import com.dot.tartarus.common.UI.InventoryScreen;
 import com.dot.tartarus.common.UI.ModMenus;
+import com.dot.tartarus.common.Utils.PacketSyncUtils;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -30,8 +40,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
+
+import static com.dot.tartarus.common.Utils.PacketSyncUtils.sendCapabilitiesToAll;
 
 @Mod(TartarusMod.MOD_ID)
 public class TartarusMod
@@ -62,9 +75,13 @@ public class TartarusMod
         ModCreativeModTabs.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModMenus.CONTAINERS.register(modEventBus);
+        TRSounds.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         TRNetwork.registerMessages();
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> {
+            event.addListener(new MaxStateClothManager());
+        });
 
 
 
@@ -78,6 +95,18 @@ public class TartarusMod
         if (Keybinds.OPEN_INVENTORY.isDown() && event.getAction() == GLFW.GLFW_PRESS) {
             TRNetwork.CHANNEL.sendToServer(new OpenInventoryPacket());
         }
+        if (Keybinds.UNDRESS_TOP.isDown() && event.getAction() == GLFW.GLFW_PRESS){
+            TRNetwork.CHANNEL.sendToServer(new SendStateChangePacket());
+
+
+
+
+
+
+
+
+        }
+
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -6,17 +6,20 @@ import com.dot.tartarus.Network.Packets.SkinPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
+import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
 import com.dot.tartarus.common.Caps.Edited.IEditedProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
 import com.dot.tartarus.common.Items.Cloth;
+import com.dot.tartarus.common.Items.ClothItem;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -51,6 +54,16 @@ public class TREvent {
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "inventory"), new ClothesProvider((Player) event.getObject()));
 
 
+        }
+    }
+    @SubscribeEvent
+    public static void onAttachCapabilitiesClothes(AttachCapabilitiesEvent<ItemStack> event) {
+        {
+            if(event.getObject().getItem() instanceof ClothItem){
+
+            event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "state"), new ClothesStateProvider());
+
+}
         }
     }
 

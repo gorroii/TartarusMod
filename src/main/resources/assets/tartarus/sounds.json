@@ -1,0 +1,14 @@
+{
+  "unzip": {
+    "subtitles": "sounds.tartarus.unzip",
+    "sounds": [
+      "tartarus:unzip"
+    ]
+  },
+  "zip": {
+    "subtitles": "sounds.tartarus.zip",
+    "sounds": [
+      "tartarus:zip"
+    ]
+  }
+}

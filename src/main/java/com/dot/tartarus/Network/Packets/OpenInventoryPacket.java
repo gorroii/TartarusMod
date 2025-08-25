@@ -15,7 +15,7 @@ public class OpenInventoryPacket {
     public OpenInventoryPacket() {}
 
     public static void encode(OpenInventoryPacket msg, FriendlyByteBuf buf) {
-        // пусто
+
     }
 
     public static OpenInventoryPacket decode(FriendlyByteBuf buf) {

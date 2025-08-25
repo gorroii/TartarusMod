@@ -36,6 +36,15 @@ public class TRNetwork {
                 ClearCachePacket::encode,
                 ClearCachePacket::decode,
                 ClearCachePacket::handle);
+        CHANNEL.registerMessage(nextId(), SendStateChangePacket.class,
+                SendStateChangePacket::encode,
+                SendStateChangePacket::decode,
+                SendStateChangePacket::handle);
+
+        CHANNEL.registerMessage(nextId(), ServerSoundPacket.class,
+                ServerSoundPacket::encode,
+                ServerSoundPacket::decode,
+                ServerSoundPacket::handle);
 
 
     }

@@ -1,6 +1,5 @@
 package com.dot.tartarus.common.Caps.Hair;
 
-import com.dot.tartarus.common.Caps.Gender.IGender;
 import net.minecraft.nbt.CompoundTag;
 
 public class IHair {

@@ -1,5 +1,6 @@
-package com.dot.tartarus.common.Caps.Hair;
+package com.dot.tartarus.common.Caps.Clothes;
 
+import com.dot.tartarus.common.Caps.Hair.IHair;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -12,22 +13,25 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class IHairProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<IHair> Hair = CapabilityManager.get(new CapabilityToken<IHair>() {});
+public class ClothesStateProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<ClothesStateCap> State = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
-    private IHair hair = null;
-    private final LazyOptional<IHair> optional = LazyOptional.of(this::createHair);
 
-    private IHair createHair(){
-        if(this.hair == null) {
-            this.hair = new IHair();
+
+    private ClothesStateCap state = null;
+    private final LazyOptional<ClothesStateCap> optional = LazyOptional.of(this::createState);
+
+    private ClothesStateCap createState(){
+        if(this.state == null) {
+            this.state = new ClothesStateCap();
         }
-        return this.hair;
+        return this.state;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == Hair) {
+        if(cap == State) {
             return optional.cast();
         }
 
@@ -37,12 +41,12 @@ public class IHairProvider implements ICapabilityProvider, INBTSerializable<Comp
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createHair().saveNBTData(nbt);
+        createState().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createHair().loadNBTData(nbt);
+        createState().loadNBTData(nbt);
     }
 }

@@ -50,16 +50,36 @@ public class ModItems {
     public static final RegistryObject<Item> INCOMPLETE_SG550 = ITEMS.register("incomplete_sg550",
             () -> new Item(new Item.Properties().rarity(MILITARY_RARITY)));
 
-    public static final RegistryObject<ClothItem> RANDOM = ITEMS.register("random",
-            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
-    public static final RegistryObject<ClothItem> SILVER_BRA = ITEMS.register("silver_bra",
-            () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
+
+
+
     public static final RegistryObject<ClothItem> LOW_JEANS = ITEMS.register("low_jeans",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTS));
-    public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
-            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+
+
     public static final RegistryObject<ClothItem> PURPLE_TOP = ITEMS.register("purple_top",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
+    public static final RegistryObject<ClothItem> SILVER_BRA = ITEMS.register("silver_bra",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
+
+    public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+
+    public static final RegistryObject<ClothItem> BLACK_FLAME_HOODIE = ITEMS.register("black_flame_hoodie",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));
+    public static final RegistryObject<ClothItem> ORANGE_CROP_JACKET = ITEMS.register("orange_crop_jacket",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));
+
+    public static final RegistryObject<ClothItem> PURPLE_HALTER_TOP = ITEMS.register("purple_halter_top",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.SHIRT));
+    public static final RegistryObject<ClothItem> RED_SPORT_BODYSUIT = ITEMS.register("red_sport_bodysuit",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.SHIRT));
+
+    public static final RegistryObject<ClothItem> BlACK_BOOTS = ITEMS.register("black_boots",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.SHOES));
+
+    public static final RegistryObject<ClothItem> LOWER_BODY_BELT = ITEMS.register("lower_body_belt",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BELT));
 
 
 

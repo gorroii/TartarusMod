@@ -1,9 +1,11 @@
 package com.dot.tartarus.Network.Packets;
 
+import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -37,6 +39,7 @@ public class SkinPacket {
                     sendAllCapabilitiesTo(player);
                     sendCapabilitiesToAll(player);
                     SkinUtil.ClearCache(player);
+
                 });
             }
 

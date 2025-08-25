@@ -12,7 +12,10 @@ public class Keybinds {
 
     public static final KeyMapping OPEN_INVENTORY = new KeyMapping("key." + TartarusMod.MOD_ID + ".open_inventory", GLFW.GLFW_KEY_C, "key." + TartarusMod.MOD_ID + ".category");
 
+    public static final KeyMapping UNDRESS_TOP = new KeyMapping("key." + TartarusMod.MOD_ID + ".undress_top", GLFW.GLFW_KEY_G, "key." + TartarusMod.MOD_ID + ".category");
+
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(Keybinds.OPEN_INVENTORY);
+        event.register(Keybinds.UNDRESS_TOP);
     }
 }
