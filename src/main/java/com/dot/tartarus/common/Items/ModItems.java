@@ -64,6 +64,14 @@ public class ModItems {
 
     public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> BLACK_BRIEFS = ITEMS.register("black_briefs",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> GREY_BRIEFS = ITEMS.register("grey_briefs",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> BROWN_BRIEFS = ITEMS.register("brown_briefs",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> RED_PANTIES = ITEMS.register("red_panties",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
 
     public static final RegistryObject<ClothItem> BLACK_FLAME_HOODIE = ITEMS.register("black_flame_hoodie",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));

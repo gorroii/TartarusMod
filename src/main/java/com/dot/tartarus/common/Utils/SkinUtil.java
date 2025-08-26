@@ -3,6 +3,7 @@ package com.dot.tartarus.common.Utils;
 import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
 import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
+import com.dot.tartarus.common.Caps.Eyes.IEyeProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
@@ -38,6 +39,10 @@ public class SkinUtil {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.level.getPlayerByUUID(uuid);
 
+        if (player == null) {
+            return baseSkin;
+        }
+
         TextureManager tm = mc.getTextureManager();
 
         // Compute ResourceLocation
@@ -53,7 +58,20 @@ public class SkinUtil {
             NativeImage image = NativeImage.read(mc.getResourceManager()
                     .getResource(baseSkin).orElseThrow().open());
 
-            //  Get clothes inventory from capability
+            // --- APPLY EYE OVERLAY FIRST ---
+            Integer eyeInt = player.getCapability(IEyeProvider.Eye)
+                    .map(eyecap -> eyecap.getEye())
+                    .orElse(null);
+
+            if (eyeInt != null) {
+                ResourceLocation eyeLoc = new ResourceLocation(
+                        TartarusMod.MOD_ID,
+                        "textures/entity/player/skin/eyes/eyes" + eyeInt + ".png"
+                );
+                applyOverlay(image, eyeLoc);
+            }
+
+            // --- APPLY CLOTHES ---
             player.getCapability(ClothesProvider.CLOTHES_INVENTORY).ifPresent(cap -> {
                 IItemHandler inv = cap.getInventory();
 
@@ -90,51 +108,7 @@ public class SkinUtil {
                         );
                     }
 
-                    try (InputStream input = mc.getResourceManager().getResource(overlayLoc).orElseThrow().open()) {
-                        NativeImage overlay = NativeImage.read(input);
-
-                        int width = Math.min(image.getWidth(), overlay.getWidth());
-                        int height = Math.min(image.getHeight(), overlay.getHeight());
-
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                int overlayPixel = overlay.getPixelRGBA(x, y);
-                                int basePixel = image.getPixelRGBA(x, y);
-
-                                int aO = (overlayPixel >> 24) & 0xFF;
-                                if (aO == 0) continue;
-
-                                int rO = (overlayPixel >> 16) & 0xFF;
-                                int gO = (overlayPixel >> 8) & 0xFF;
-                                int bO = overlayPixel & 0xFF;
-
-                                int aB = (basePixel >> 24) & 0xFF;
-                                int rB = (basePixel >> 16) & 0xFF;
-                                int gB = (basePixel >> 8) & 0xFF;
-                                int bB = basePixel & 0xFF;
-
-                                float alphaO = aO / 255f;
-                                float alphaB = aB / 255f;
-
-                                float outA = alphaO + alphaB * (1 - alphaO);
-                                float outR = (rO * alphaO + rB * alphaB * (1 - alphaO)) / outA;
-                                float outG = (gO * alphaO + gB * alphaB * (1 - alphaO)) / outA;
-                                float outB = (bO * alphaO + bB * alphaB * (1 - alphaO)) / outA;
-
-                                int blended =
-                                        ((int) (outA * 255) << 24) |
-                                                ((int) (outR) << 16) |
-                                                ((int) (outG) << 8) |
-                                                ((int) (outB));
-
-                                image.setPixelRGBA(x, y, blended);
-                            }
-                        }
-
-                        overlay.close();
-                    } catch (Exception ignored) {
-                        // texture not found → skip
-                    }
+                    applyOverlay(image, overlayLoc);
                 }
             });
 
@@ -159,5 +133,55 @@ public class SkinUtil {
     public static void ClearCache(Player player) {
         UUID uuid = player.getUUID();
         cache.remove(uuid);
+    }
+
+    /** Blends an overlay texture onto the base image */
+    private static void applyOverlay(NativeImage base, ResourceLocation overlayLoc) {
+        Minecraft mc = Minecraft.getInstance();
+        try (InputStream input = mc.getResourceManager().getResource(overlayLoc).orElseThrow().open()) {
+            NativeImage overlay = NativeImage.read(input);
+
+            int width = Math.min(base.getWidth(), overlay.getWidth());
+            int height = Math.min(base.getHeight(), overlay.getHeight());
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int overlayPixel = overlay.getPixelRGBA(x, y);
+                    int basePixel = base.getPixelRGBA(x, y);
+
+                    int aO = (overlayPixel >> 24) & 0xFF;
+                    if (aO == 0) continue;
+
+                    int rO = (overlayPixel >> 16) & 0xFF;
+                    int gO = (overlayPixel >> 8) & 0xFF;
+                    int bO = overlayPixel & 0xFF;
+
+                    int aB = (basePixel >> 24) & 0xFF;
+                    int rB = (basePixel >> 16) & 0xFF;
+                    int gB = (basePixel >> 8) & 0xFF;
+                    int bB = basePixel & 0xFF;
+
+                    float alphaO = aO / 255f;
+                    float alphaB = aB / 255f;
+
+                    float outA = alphaO + alphaB * (1 - alphaO);
+                    float outR = (rO * alphaO + rB * alphaB * (1 - alphaO)) / outA;
+                    float outG = (gO * alphaO + gB * alphaB * (1 - alphaO)) / outA;
+                    float outB = (bO * alphaO + bB * alphaB * (1 - alphaO)) / outA;
+
+                    int blended =
+                            ((int) (outA * 255) << 24) |
+                                    ((int) (outR) << 16) |
+                                    ((int) (outG) << 8) |
+                                    ((int) (outB));
+
+                    base.setPixelRGBA(x, y, blended);
+                }
+            }
+
+            overlay.close();
+        } catch (Exception ignored) {
+            // texture not found → skip
+        }
     }
 }

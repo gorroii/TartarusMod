@@ -2,7 +2,7 @@ package com.dot.tartarus.common.Events;
 
 import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Edited.IEditedProvider;
-import com.dot.tartarus.common.UI.CharacterEditor;
+import com.dot.tartarus.common.UI.CharacterEditorScreen;
 import com.dot.tartarus.common.Utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ public class TRClientEvent {
         Player player = event.getPlayer();
         int editor = player.getCapability(IEditedProvider.Edited).map(editedcap -> editedcap.getEdited()).orElse(null);
         if(editor !=1){
-            //Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new CharacterEditor()));
+            //Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new CharacterEditorScreen()));
         }
     }
 

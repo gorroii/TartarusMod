@@ -13,7 +13,7 @@ public class InventoryScreen extends AbstractContainerScreen<InventoryMenu> {
 
 
     private static final ResourceLocation CLOTHES_INVENTORY_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/inventory.png");
-    private static final ResourceLocation HAT_SLOT_LOCATION = new ResourceLocation("minecraft", "textures/item/diamond_sword.png");
+    private static final ResourceLocation HAT_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/hat.png");
     private static final ResourceLocation SHIRT_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/shirt.png");
     private static final ResourceLocation PANTS_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/pants.png");
     private static final ResourceLocation SHOES_SLOT_LOCATION = new ResourceLocation(TartarusMod.MOD_ID, "textures/gui/container/shoes.png");

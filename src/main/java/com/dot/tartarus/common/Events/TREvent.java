@@ -8,6 +8,7 @@ import com.dot.tartarus.TartarusMod;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
 import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
 import com.dot.tartarus.common.Caps.Edited.IEditedProvider;
+import com.dot.tartarus.common.Caps.Eyes.IEyeProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
@@ -50,6 +51,8 @@ public class TREvent {
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "hair"), new IHairProvider());
 
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "edited"), new IEditedProvider());
+
+                event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "eye"), new IEyeProvider());
 
                 event.addCapability(new ResourceLocation(TartarusMod.MOD_ID, "inventory"), new ClothesProvider((Player) event.getObject()));
 
@@ -103,6 +106,11 @@ public class TREvent {
                     )
 
             );
+        oldPlayer.getCapability(IEyeProvider.Eye).ifPresent(oldCap ->
+                newPlayer.getCapability(IEyeProvider.Eye).ifPresent(newCap ->
+                        newCap.copyFrom(oldCap)
+                )
+        );
 
 
 

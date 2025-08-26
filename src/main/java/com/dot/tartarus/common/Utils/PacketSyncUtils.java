@@ -5,6 +5,8 @@ import com.dot.tartarus.Network.Packets.SyncPlayerCapsPacket;
 import com.dot.tartarus.Network.TRNetwork;
 import com.dot.tartarus.common.Caps.Clothes.ClothesCaps;
 import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
+import com.dot.tartarus.common.Caps.Eyes.IEye;
+import com.dot.tartarus.common.Caps.Eyes.IEyeProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
@@ -19,10 +21,12 @@ public class PacketSyncUtils {
         int gender = player.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
         int skin = player.getCapability(ISkinProvider.Skin).map(skincap -> skincap.getSkin()).orElse(null);
         int hair = player.getCapability(IHairProvider.Hair).map(haircap -> haircap.getHair()).orElse(null);
+        int eye = player.getCapability(IEyeProvider.Eye).map(haircap -> haircap.getEye()).orElse(null);
+
 
         TRNetwork.CHANNEL.send(
                 PacketDistributor.ALL.noArg(),
-                new SyncPlayerCapsPacket(player.getUUID(), gender, skin, hair)
+                new SyncPlayerCapsPacket(player.getUUID(), gender, skin, hair, eye)
         );
     }
 
@@ -32,10 +36,11 @@ public class PacketSyncUtils {
             int gender = other.getCapability(IGenderProvider.Gender).map(gendercap -> gendercap.getGender()).orElse(null);
             int skin = other.getCapability(ISkinProvider.Skin).map(skincap -> skincap.getSkin()).orElse(null);
             int hair = other.getCapability(IHairProvider.Hair).map(haircap -> haircap.getHair()).orElse(null);
+            int eye = other.getCapability(IEyeProvider.Eye).map(haircap -> haircap.getEye()).orElse(null);
 
             TRNetwork.CHANNEL.send(
                     PacketDistributor.PLAYER.with(() -> (ServerPlayer) target),
-                    new SyncPlayerCapsPacket(other.getUUID(), gender, skin, hair)
+                    new SyncPlayerCapsPacket(other.getUUID(), gender, skin, hair, eye)
             );
         }
     }

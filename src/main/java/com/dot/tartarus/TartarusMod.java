@@ -1,6 +1,7 @@
 package com.dot.tartarus;
 
 import com.dot.tartarus.Client.Keybinds;
+
 import com.dot.tartarus.Network.Packets.ClearCachePacket;
 import com.dot.tartarus.Network.Packets.OpenInventoryPacket;
 import com.dot.tartarus.Network.Packets.SendStateChangePacket;
@@ -21,6 +22,8 @@ import com.dot.tartarus.common.Utils.SkinUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -143,6 +146,7 @@ public class TartarusMod
         public static void onClientSetup(FMLClientSetupEvent event) {
 
         }
+
     }
 }
 

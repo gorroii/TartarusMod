@@ -1,5 +1,6 @@
 package com.dot.tartarus.Network.Packets;
 
+import com.dot.tartarus.common.Caps.Eyes.IEyeProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
 import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.dot.tartarus.common.Caps.Skin.ISkinProvider;
@@ -17,12 +18,14 @@ public class SyncPlayerCapsPacket {
     private final int gender;
     private final int skin;
     private final int hair;
+    private final int eye;
 
-    public SyncPlayerCapsPacket(UUID playerUUID, int gender, int skin, int hair) {
+    public SyncPlayerCapsPacket(UUID playerUUID, int gender, int skin, int hair, int eye) {
         this.playerUUID = playerUUID;
         this.gender = gender;
         this.skin = skin;
         this.hair = hair;
+        this.eye = eye;
     }
 
 
@@ -31,11 +34,12 @@ public class SyncPlayerCapsPacket {
         buf.writeInt(pkt.gender);
         buf.writeInt(pkt.skin);
         buf.writeInt(pkt.hair);
+        buf.writeInt(pkt.eye);
     }
 
 
     public static SyncPlayerCapsPacket decode(FriendlyByteBuf buf) {
-        return new SyncPlayerCapsPacket(buf.readUUID(), buf.readInt(), buf.readInt(), buf.readInt());
+        return new SyncPlayerCapsPacket(buf.readUUID(), buf.readInt(), buf.readInt(), buf.readInt(),buf.readInt());
     }
 
 
@@ -47,6 +51,7 @@ public class SyncPlayerCapsPacket {
                 player.getCapability(IGenderProvider.Gender).ifPresent(cap -> cap.setGender(pkt.gender));
                 player.getCapability(ISkinProvider.Skin).ifPresent(cap -> cap.setSkin(pkt.skin));
                 player.getCapability(IHairProvider.Hair).ifPresent(cap -> cap.setHair(pkt.hair));
+                player.getCapability(IEyeProvider.Eye).ifPresent(cap -> cap.setEye(pkt.eye));
                 SkinUtil.ClearCache(player); // force cache refresh
             }
         });
