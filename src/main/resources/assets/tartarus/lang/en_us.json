@@ -1,3 +1,32 @@
 {
-  "item.khorn.khornum": "khornum"
+  "item.tartarus.finished_arasaka_mechanism": "Finished Arasaka Mechanism",
+  "item.tartarus.unfinished_arasaka_mechanism": "Unfinished Arasaka Mechanism",
+  "item.tartarus.monster_energy": "Energy Drink - Monster",
+
+  "tooltip.clothitem.slot": "Slot: ",
+  "slot.cloth.head": "Head",
+  "slot.cloth.bra": "Bra",
+  "slot.cloth.pants": "Pants",
+  "slot.cloth.panties": "Panties",
+  "slot.cloth.belt": "Belt",
+  "slot.cloth.jacket": "Jacket",
+  "slot.cloth.shirt": "Shirt",
+
+  "item.tartarus.purple_top": "Purple Top",
+  "item.tartarus.silver_top": "Silver Top",
+  "item.tartarus.purple_halter_top": "Purple Halter Top",
+
+  "item.tartarus.black_briefs": "Black Briefs",
+  "item.tartarus.grey_briefs": "Grey Briefs",
+  "item.tartarus.brown_briefs": "Brown Briefs",
+
+  "item.tartarus.red_sport_bodysuit": "Red Sport Costume",
+
+  "item.tartarus.black_boots": "Black Boots",
+
+  "item.tartarus.low_jeans": "Low Jeans",
+
+  "item.tartarus.black_flames_hoodie": "Black Flames Hoodie",
+
+  "item.tartarus.lower_body_belt": "Lower Body Belt"
 }

@@ -1,3 +1,34 @@
 {
-  "item.tartarus.finished_arasaka_mechanism": "Законченный Механизм Арасаки"
+  "item.tartarus.finished_arasaka_mechanism": "Законченный Механизм Арасаки",
+  "item.tartarus.unfinished_arasaka_mechanism": "Незаконченный Механизм Арасаки",
+  "item.tartarus.monster_energy": "Энергетик - Монстр",
+
+
+  "tooltip.clothitem.slot": "Слот: ",
+  "slot.cloth.head": "Голова",
+  "slot.cloth.bra": "Лифчик",
+  "slot.cloth.pants": "Штаны",
+  "slot.cloth.panties": "Трусы",
+  "slot.cloth.belt": "Пояс",
+  "slot.cloth.jacket": "Жилетка",
+  "slot.cloth.shirt": "Футболка",
+
+  "item.tartarus.purple_top": "Фиолетовый Топик",
+  "item.tartarus.silver_top": "Серебрянный Топик",
+  "item.tartarus.purple_halter_top": "Фиолетовый Хальтер Топик",
+
+  "item.tartarus.black_briefs": "Черные Боксеры",
+  "item.tartarus.grey_briefs": "Серые Боксеры",
+  "item.tartarus.brown_briefs": "Коричневые Боксеры",
+
+  "item.tartarus.red_sport_bodysuit": "Красный Спортивный Костюм",
+
+  "item.tartarus.black_boots": "Черные кроссовки",
+
+  "item.tartarus.low_jeans": "Низкие Джинсы",
+
+  "item.tartarus.black_flames_hoodie": "Худи - Черное Пламя",
+  "item.tartarus.orange_crop_jacket": "Оранжевая Кроп Жилетка",
+
+  "item.tartarus.lower_body_belt": "Тазовый Пояс"
 }

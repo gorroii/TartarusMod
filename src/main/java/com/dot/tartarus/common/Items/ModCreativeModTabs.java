@@ -22,6 +22,14 @@ public class ModCreativeModTabs {public static final DeferredRegister<CreativeMo
                             output.accept(ModItems.FINISHED_ARASAKA_MECHANISM.get());
                             output.accept(ModItems.FINISHED_MILITARY_MECHANISM.get());
                             output.accept(ModItems.FINISHED_ALUMINIUM_MECHANISM.get());
+                            output.accept(ModItems.BlACK_BOOTS.get());
+                            output.accept(ModItems.BLACK_FLAME_HOODIE.get());
+                            output.accept(ModItems.BLACK_BRIEFS.get());
+                            output.accept(ModItems.BROWN_BRIEFS.get());
+                            output.accept(ModItems.GREY_BRIEFS.get());
+                            output.accept(ModItems.THONG.get());
+                            output.accept(ModItems.RED_PANTIES.get());
+                            output.accept(ModItems.RED_SPORT_BODYSUIT.get());
 
 
                         })
