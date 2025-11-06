@@ -5,6 +5,7 @@ import com.dot.tartarus.common.Caps.Clothes.ClothesProvider;
 import com.dot.tartarus.common.Caps.Clothes.ClothesStateProvider;
 import com.dot.tartarus.common.Caps.Eyes.IEyeProvider;
 import com.dot.tartarus.common.Caps.Gender.IGenderProvider;
+import com.dot.tartarus.common.Caps.Hair.IHairProvider;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -70,6 +71,22 @@ public class SkinUtil {
                 );
                 applyOverlay(image, eyeLoc);
             }
+            NativeImage hairimage = NativeImage.read(mc.getResourceManager()
+                    .getResource(baseSkin).orElseThrow().open());
+
+            // --- APPLY EYE OVERLAY FIRST ---
+           Integer hairInt = player.getCapability(IHairProvider.Hair)
+                    .map(eyecap -> eyecap.getHair())
+                    .orElse(null);
+
+            if (eyeInt != null) {
+                ResourceLocation hairLoc = new ResourceLocation(
+                        TartarusMod.MOD_ID,
+                        "textures/entity/player/skin/hair/hair" + hairInt + ".png"
+                );
+                applyOverlay(image, hairLoc);
+            }
+
 
             // --- APPLY CLOTHES ---
             player.getCapability(ClothesProvider.CLOTHES_INVENTORY).ifPresent(cap -> {
@@ -92,7 +109,7 @@ public class SkinUtil {
 
                     // choose path based on slot
                     ResourceLocation overlayLoc;
-                    if (slot == 1 || slot == 5) {
+                    if (slot == 1 || slot == 5 || slot == 6) {
                         overlayLoc = new ResourceLocation(
                                 TartarusMod.MOD_ID,
                                 "textures/entity/player/clothes/" + genderStr + "/" +

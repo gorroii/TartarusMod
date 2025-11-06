@@ -13,12 +13,12 @@ import net.minecraft.world.item.Item;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MaxStateClothManager extends SimpleJsonResourceReloadListener {
+public class ClothManager extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Map<Item, Integer> STATES = new HashMap<>();
 
-    public MaxStateClothManager() {
-        super(GSON, "cloth_states"); // folder inside "data/namespace/"
+    public ClothManager() {
+        super(GSON, "cloth_params"); // folder inside "data/namespace/"
     }
 
     @Override
@@ -28,6 +28,7 @@ public class MaxStateClothManager extends SimpleJsonResourceReloadListener {
         map.forEach((id, json) -> {
             try {
                 int number = json.getAsJsonObject().get("max_states").getAsInt();
+
 
                 // resolve item from id namespace:path
                 Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(id.getNamespace(), id.getPath()));

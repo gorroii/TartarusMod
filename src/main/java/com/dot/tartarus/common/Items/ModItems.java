@@ -58,11 +58,15 @@ public class ModItems {
 
     public static final RegistryObject<ClothItem> LOW_JEANS = ITEMS.register("low_jeans",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTS));
+    public static final RegistryObject<ClothItem> SHORT_JEANS = ITEMS.register("short_jeans",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTS));
 
 
     public static final RegistryObject<ClothItem> PURPLE_TOP = ITEMS.register("purple_top",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
     public static final RegistryObject<ClothItem> SILVER_BRA = ITEMS.register("silver_bra",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
+    public static final RegistryObject<ClothItem> LACE_BRA = ITEMS.register("lace_bra",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.BRA));
 
     public static final RegistryObject<ClothItem> THONG = ITEMS.register("thong",
@@ -75,10 +79,14 @@ public class ModItems {
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
     public static final RegistryObject<ClothItem> RED_PANTIES = ITEMS.register("red_panties",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
+    public static final RegistryObject<ClothItem> BLACK_LACE_PANTIES = ITEMS.register("black_lace_panties",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.PANTIES));
 
     public static final RegistryObject<ClothItem> BLACK_FLAME_HOODIE = ITEMS.register("black_flame_hoodie",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));
     public static final RegistryObject<ClothItem> ORANGE_CROP_JACKET = ITEMS.register("orange_crop_jacket",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));
+    public static final RegistryObject<ClothItem> RED_KITCH_JACKET= ITEMS.register("red_kitch_jacket",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.JACKET));
 
     public static final RegistryObject<ClothItem> PURPLE_HALTER_TOP = ITEMS.register("purple_halter_top",
@@ -91,6 +99,14 @@ public class ModItems {
 
     public static final RegistryObject<ClothItem> LOWER_BODY_BELT = ITEMS.register("lower_body_belt",
             () -> new ClothItem(new Item.Properties(),ClothesSlot.BELT));
+    public static final RegistryObject<ClothItem> BLACK_BELTED_STOCKINGS = ITEMS.register("black_belted_stockings",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.BELT));
+
+    public static final RegistryObject<ClothItem> FEMALE_HAT = ITEMS.register("female_hat",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.HEAD));
+
+    public static final RegistryObject<ClothItem> VELVET_GLOVES = ITEMS.register("velvet_gloves",
+            () -> new ClothItem(new Item.Properties(),ClothesSlot.GLOVES));
 
 
 

@@ -12,6 +12,7 @@
   "slot.cloth.belt": "Пояс",
   "slot.cloth.jacket": "Жилетка",
   "slot.cloth.shirt": "Футболка",
+  "slot.cloth.shoes": "Ботинки",
 
   "item.tartarus.purple_top": "Фиолетовый Топик",
   "item.tartarus.silver_top": "Серебрянный Топик",
@@ -26,9 +27,11 @@
   "item.tartarus.black_boots": "Черные кроссовки",
 
   "item.tartarus.low_jeans": "Низкие Джинсы",
+  "item.tartarus.short_jeans": "Джинсовые Шорты",
 
-  "item.tartarus.black_flames_hoodie": "Худи - Черное Пламя",
+  "item.tartarus.black_flame_hoodie": "Худи - Черное Пламя",
   "item.tartarus.orange_crop_jacket": "Оранжевая Кроп Жилетка",
+  "item.tartarus.red_kitch_jacket": "Красная Китч Жилетка",
 
   "item.tartarus.lower_body_belt": "Тазовый Пояс"
 }
